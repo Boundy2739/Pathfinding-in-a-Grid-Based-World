@@ -1,25 +1,25 @@
 #the code currently changes all the 0 in the rows into a 1 until it reaches a 5 which is the finish line for the time
-def create_grid(start,finish):
+def create_grid(start,finish,wall):
     grid = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     ]
     
     #temporary starting line
     grid[start[0]][start[1]] = 1
     #temporary finish
     grid[finish[0]][finish[1]] = 5
+    grid[wall[0]][wall[1]] = 2
     for rows in grid:
-        for elements in rows:
-            print(elements, end=" ")
+        print("".join([' ' if cell == 0 else  '█' if cell == 2 else '?' for cell in rows]))
         print()
     return grid
 def move(start,current_grid,rows,columns,finish):
@@ -53,11 +53,11 @@ def update_grid(grid,start):
     print("")
     return grid
 
-start = [5,8]
-finish = [9,15]
-
-rows = 10
+start = [0,0]
+finish = [3,19]
+wall = [0,1]
+rows = 3
 columns = 20
-current_grid = create_grid(start,finish)
-new_point = move(start,current_grid,rows,columns,finish)
+current_grid = create_grid(start,finish,wall)
+#new_point = move(start,current_grid,rows,columns,finish)
 
