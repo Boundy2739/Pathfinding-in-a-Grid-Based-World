@@ -283,8 +283,9 @@ def right_space(grid,entrance,previous):
             grid[entrance[0]][entrance[1]] = 0
             entrance[1] = entrance[1] + 1
             grid[entrance[0]][entrance[1]] = 0
+            return entrance
      else:
-        backtrack(grid,entrance,previous)       
+        return backtrack(grid,entrance,previous)       
       
      
 def left_space(grid,entrance,previous):
@@ -296,8 +297,9 @@ def left_space(grid,entrance,previous):
                 grid[entrance[0]][entrance[1]] = 0
                 entrance[1] = entrance[1] - 1
                 grid[entrance[0]][entrance[1]] = 0
+                return entrance
         else:
-             backtrack(grid,entrance,previous)        
+            return backtrack(grid,entrance,previous)        
                
                 
         
@@ -311,8 +313,9 @@ def up_space(grid,entrance,previous):
         grid[entrance[0]][entrance[1]] = 0
         entrance[0] = entrance[0] - 1
         grid[entrance[0]][entrance[1]] = 0
+        return entrance
       else:
-        backtrack(grid,entrance,previous)
+        return backtrack(grid,entrance,previous)
           
 def down_space(grid,entrance,previous):
      if grid[entrance[0] + 2][entrance[1]] == 4:
@@ -322,38 +325,40 @@ def down_space(grid,entrance,previous):
                 grid[entrance[0]][entrance[1]] = 0
                 entrance[0] = entrance[0] + 1
                 grid[entrance[0]][entrance[1]] = 0
+                return entrance
      else:
-        backtrack(grid,entrance,previous)
+       return backtrack(grid,entrance,previous)
+       
                
 def backtrack(grid,entrance,previous):
-      if grid[entrance[0]][entrance[1] - 2] !=4 and grid[entrance[0]+2][entrance[1]] !=4  and grid[entrance[0]-2][entrance[1]] !=4  :
+      if grid[entrance[0]][entrance[1] - 2] !=4 and grid[entrance[0]+2][entrance[1]] !=4  and grid[entrance[0]-2][entrance[1]] !=4  and grid[entrance[0]][entrance[1]+2] !=4:
        entrance = previous[-1]
        previous.pop(-1)
-       backtrack(grid,entrance,previous)
+       return backtrack(grid,entrance,previous)
        
          
       else:
-        return
+        return entrance
 
                      
                 
     
              
 def create_spaces(grid,entrance):
-    count = 60
+    count = 200
     exit = [15,28]
     previous = []
     while count > 0:
         space = random.choice((1,2,3,4))
         match space:
             case 1:
-                right_space(grid,entrance,previous)
+                entrance = right_space(grid,entrance,previous)
             case 2:
-                left_space(grid,entrance,previous)   
+                entrance = left_space(grid,entrance,previous)   
             case 3:
-                up_space(grid,entrance,previous)      
+                entrance = up_space(grid,entrance,previous)      
             case 4:
-                down_space(grid,entrance,previous)     
+                entrance = down_space(grid,entrance,previous)     
         count = count - 1
         for rows in grid:
             print("".join([map.get(cell) for cell in rows]))
