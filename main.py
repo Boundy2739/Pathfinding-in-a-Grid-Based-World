@@ -1,4 +1,3 @@
-#the code currently changes all the 0 in the rows into a 1 until it reaches a 5 which is the finish line for the time
 import random
 import time
 import os
@@ -74,7 +73,7 @@ def random_grid(entrance,previous):
         1 : "\033[44m \033[0m",
         3 : "\033[41m \033[0m",
         2 : '█',
-        4 : "\033[45m \033[0m",
+        4 : "\033[46m \033[0m",
         5 : "\033[43m \033[0m",
     }
     create_spaces(grid,entrance,previous)
@@ -83,7 +82,7 @@ def random_grid(entrance,previous):
 
     return grid
 
-def move(entrance,current_grid,rows,columns,finish):
+def move(entrance,current_grid,rows,columns,finish,previous):
     while entrance[1] < columns - 1:
         #this checks if theres is a free path both up and down picks a random path to follow
         if current_grid [entrance[0] + 1][entrance[1]] == 0 and current_grid[entrance[0] - 1][entrance[1]] == 0:
@@ -98,6 +97,21 @@ def move(entrance,current_grid,rows,columns,finish):
                         return
         elif current_grid [entrance[0]][entrance[1]-1] == 0 and current_grid[entrance[0]][entrance[1]+1] == 0:
             pick_a_path_leftright(current_grid,entrance)
+            if  current_grid [finish[0]][finish[1]] == 1:
+                        print("Exit reached!!!")
+                        return
+        elif current_grid [entrance[0]][entrance[1]-1] == 0 and current_grid[entrance[0]-1][entrance[1]] == 0:
+            pick_a_path_leftup(current_grid,entrance)
+            if  current_grid [finish[0]][finish[1]] == 1:
+                        print("Exit reached!!!")
+                        return
+        elif current_grid [entrance[0]][entrance[1]-1] == 0 and current_grid[entrance[0]+1][entrance[1]] == 0:
+            pick_a_path_leftdown(current_grid,entrance)
+            if  current_grid [finish[0]][finish[1]] == 1:
+                        print("Exit reached!!!")
+                        return
+        elif current_grid [entrance[0]][entrance[1]+1] == 0 and current_grid[entrance[0]-1][entrance[1]] == 0:
+            pick_a_path_rightup(current_grid,entrance)
             if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
@@ -143,8 +157,7 @@ def move_left(current_grid,entrance,finish):
                     if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
-                    back_right(current_grid,entrance,finish)
-                
+                    back_right(current_grid,entrance,finish)             
 def move_up(current_grid,entrance,finish):
     
                     entrance[0] = entrance[0] - 1
@@ -192,7 +205,37 @@ def pick_a_path_leftright(current_grid,entrance):
             entrance[1] = entrance[1] + 1
             current_grid = update_grid(current_grid,entrance)
     return 
-     
+def pick_a_path_rightup(current_grid,entrance):
+    path = random.choice((1,2))
+    match path:
+        case 1:
+           entrance[0] = entrance[0] - 1
+           current_grid = update_grid(current_grid,entrance)
+        case 2:
+            entrance[1] = entrance[1] + 1
+            current_grid = update_grid(current_grid,entrance)
+    return
+def pick_a_path_leftdown(current_grid,entrance):
+    path = random.choice((1,2))
+    match path:
+        case 1:
+           entrance[0] = entrance[0] + 1
+           current_grid = update_grid(current_grid,entrance)
+        case 2:
+            entrance[1] = entrance[1] - 1
+            current_grid = update_grid(current_grid,entrance)
+    return
+def pick_a_path_leftup(current_grid,entrance):
+    path = random.choice((1,2))
+    match path:
+        case 1:
+           entrance[0] = entrance[0] - 1
+           current_grid = update_grid(current_grid,entrance)
+        case 2:
+            entrance[1] = entrance[1] - 1
+            current_grid = update_grid(current_grid,entrance)
+    return
+
 def back_left(current_grid,entrance,finish):
       if current_grid[entrance[0]][entrance[1] + 1] !=0 and current_grid[entrance[0]+1][entrance[1]] !=0  and current_grid[entrance[0]-1][entrance[1]] !=0 :
         entrance[1] = entrance[1] - 1
@@ -248,33 +291,7 @@ def update_grid(grid,entrance):
     print("")
     print("")
     return grid
-def create_wall(grid):
-    for i in range (19):
-        rand_wall = random.randrange(0,19)
-        if grid[0][rand_wall] == 0:
-            grid[0][rand_wall] = 2
-        else:
-            print("space taken!!")
 
-    for i in range (19):
-        rand_wall = random.randrange(0,19)
-        if grid[1][rand_wall] == 0:
-            grid[1][rand_wall] = 2
-        else:
-            print("space taken!!")
-    for i in range (19):
-        rand_wall = random.randrange(0,19)
-        if grid[2][rand_wall] == 0:
-            grid[2][rand_wall] = 2
-        else:
-            print("space taken!!")
-    for i in range (19):
-        rand_wall = random.randrange(0,19)
-        if grid[3][rand_wall] == 0:
-            grid[3][rand_wall] = 2
-        else:
-            print("space taken!!")
-    return grid
 def right_space(grid,entrance,previous):
      
      
@@ -341,7 +358,15 @@ def backtrack(grid,entrance,previous):
          
       else:
         return entrance
-
+def backstep(grid,entrance,previous):
+     neighbours = [grid[entrance[0]][entrance[1] - 1],grid[entrance[0]][entrance[1] + 1],grid[entrance[0]-1][entrance[1]],grid[entrance[0]+1][entrance[1]]]
+     if all(value != 0 for value in neighbours):
+       entrance = previous[-1]
+       previous.pop(-1)
+          
+       return backstep(grid,entrance,previous)
+     else:
+          return entrance
                      
                 
     
@@ -350,7 +375,8 @@ def create_spaces(grid,entrance,previous):
     
     for rows in grid:
          if any(cell == 4 for cell in rows):
-    
+            time.sleep(0.01)
+            os.system('cls' if os.name == 'nt' else 'clear')
             exit = [15,28]
             
             
@@ -373,13 +399,13 @@ def create_spaces(grid,entrance,previous):
 
 previous = []
 entrance = [2,2]
-finish = [15,11]
-wall = [0,1]
+finish = [19,11]
 rows = 3
 columns = 20
 
 current_grid = random_grid(entrance,previous)
-entrance = [1,7]
-#new_point = move(entrance,current_grid,rows,columns,finish)
+entrance = [2,2]
+previous = []
+new_point = move(entrance,current_grid,rows,columns,finish,previous)
 
 
