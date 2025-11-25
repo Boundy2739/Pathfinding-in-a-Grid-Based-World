@@ -15,11 +15,11 @@ def create_grid(entrance,finish,previous):
     [0,0,0,0,0,0,0,0,2,0,2,0,2,2,2,2,2,0,0,0],
     [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
     ]
     global map 
@@ -41,31 +41,31 @@ def create_grid(entrance,finish,previous):
         
     return grid
 
-def random_grid(entrance,previous):
+def random_grid(entrance,previous,exit):
     grid = [
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,4,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     ]
     global map 
     map = {
@@ -77,13 +77,16 @@ def random_grid(entrance,previous):
         5 : "\033[43m \033[0m",
     }
     create_spaces(grid,entrance,previous)
+    grid[exit[0]][exit[1]] = 5
     for rows in grid:
         print("".join([map.get(cell) for cell in rows]))
 
     return grid
 
 def move(entrance,current_grid,columns,finish,previous):
+    
     while entrance[1] < columns - 1:
+        nearby_cell = [current_grid [entrance[0] + 1][entrance[1]],current_grid [entrance[0] - 1][entrance[1]],current_grid [entrance[0]][entrance[1]+1],current_grid [entrance[0]][entrance[1]-1]]
         #this checks if theres is a free path both up and down picks a random path to follow
         if current_grid [entrance[0] + 1][entrance[1]] == 0 and current_grid[entrance[0] - 1][entrance[1]] == 0:
             pick_a_path_updown(current_grid,entrance)
@@ -118,24 +121,20 @@ def move(entrance,current_grid,columns,finish,previous):
         else:
                 
             #moves right if there is space
-                if current_grid[entrance[0]][entrance[1] + 1] != 2 and current_grid[entrance[0]][entrance[1] + 1] != 1 and current_grid[entrance[0]][entrance[1] + 1] != 3: 
+                if nearby_cell[2] not in [2,1,3]: 
                    entrance = move_right(current_grid,entrance,finish,previous)
                 #moves down if there is space
-                elif current_grid [entrance[0] + 1][entrance[1]] != 2 and current_grid [entrance[0] + 1][entrance[1]] != 1 and current_grid[entrance[0]+1][entrance[1]] != 3:
+                elif nearby_cell[0] not in [2,1,3]:
                     entrance = move_down(current_grid,entrance,finish,previous)
                 #moves up if there is space
-                elif current_grid [entrance[0] - 1][entrance[1]] != 2 and current_grid [entrance[0] - 1][entrance[1]] != 1:
+                elif nearby_cell[1] not in [2,1,3]:
                     entrance = move_up(current_grid,entrance,finish,previous)
                 #moves left if there is space
-                elif current_grid[entrance[0]][entrance[1] - 1] != 2 and current_grid[entrance[0]][entrance[1] - 1] != 1: 
+                elif nearby_cell[3] not in [2,1,3]: 
                     entrance = move_left(current_grid,entrance,finish,previous)
                 
                 
-                if entrance [1] == columns - 1:
-                    entrance [1] = 0
-                    if entrance[0] < rows:
-                        entrance [0] += 1
-                    current_grid = update_grid(current_grid,entrance)
+                
         if  current_grid [finish[0]][finish[1]] == 1:
                     print("Exit reached!!!")
                     return
@@ -174,7 +173,6 @@ def move_down(current_grid,entrance,finish,previous):
                     previous.append(previous_step)
                     entrance[0] = entrance[0] + 1
                     current_grid = update_grid(current_grid,entrance)
-                    backstep(current_grid,entrance,previous)
                     if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
@@ -252,42 +250,9 @@ def pick_a_path_leftup(current_grid,entrance):
             current_grid = update_grid(current_grid,entrance)
     return
 
-def back_left(current_grid,entrance,finish):
-      if current_grid[entrance[0]][entrance[1] + 1] !=0 and current_grid[entrance[0]+1][entrance[1]] !=0  and current_grid[entrance[0]-1][entrance[1]] !=0 :
-        entrance[1] = entrance[1] - 1
-        current_grid = update_grid(current_grid,entrance)
-        back_left(current_grid,entrance,finish) 
-      else:
-        return
-def back_down(current_grid,entrance,finish):
-      if current_grid[entrance[0]][entrance[1] + 1] !=0 and current_grid[entrance[0]-1][entrance[1]] !=0  and current_grid[entrance[0]][entrance[1]-1] !=0 :
-        entrance[0] = entrance[0] + 1
-        current_grid = update_grid(current_grid,entrance)
-        back_down(current_grid,entrance,finish) 
-      else:
-        return
-def back_right(current_grid,entrance,finish):
-      if current_grid[entrance[0]][entrance[1] - 1] !=0 and current_grid[entrance[0]+1][entrance[1]] !=0  and current_grid[entrance[0]-1][entrance[1]] !=0  :
-        entrance[1] = entrance[1] + 1
-        current_grid = update_grid(current_grid,entrance)
-        back_right(current_grid,entrance,finish) 
-      else:
-        return
-def back_up(current_grid,entrance,finish):
-      neighbours = [current_grid[entrance[0]][entrance[1]+1],current_grid[entrance[0]][entrance[1]-1],current_grid[entrance[0]+1][entrance[1]]]
-      if all(value != 0 for value in neighbours) and not any (value == 5 for value in neighbours):
-        if current_grid[entrance[0]-1][entrance[1]] != 2:
-            entrance[0] = entrance[0] - 1
-        else:
-             if current_grid[entrance[0]][entrance[1] + 1] == 1:
-                  entrance[1] = entrance[1] + 1
-                  current_grid = update_grid(current_grid,entrance)
-             return
-        current_grid = update_grid(current_grid,entrance)
-        back_up(current_grid,entrance,finish) 
-      
-      else:
-        return     
+
+
+
     
 
 def update_grid(grid,entrance):
@@ -376,7 +341,7 @@ def backtrack(grid,entrance,previous):
         return entrance
 def backstep(grid,entrance,previous):
      neighbours = [grid[entrance[0]][entrance[1] - 1],grid[entrance[0]][entrance[1] + 1],grid[entrance[0]-1][entrance[1]],grid[entrance[0]+1][entrance[1]]]
-     if all(value != 0 for value in neighbours) and not any(value == 5 for value in neighbours):
+     if all(value != 0 for value in neighbours) and all(value != 5 for value in neighbours):
        entrance = previous[-1]
        previous.pop(-1)
        update_grid(grid,entrance) 
@@ -414,14 +379,15 @@ def create_spaces(grid,entrance,previous):
     
 
 previous = []
-entrance = [1,1]
-finish = [15,11]
+entrance = [2,2]
+finish = [20,28]
 rows = 3
-columns = 20
+columns = 60
 
-current_grid = create_grid(entrance,finish,previous)
-entrance = [1,1]
+current_grid = random_grid(entrance,previous,finish)
+entrance = [2,2]
 previous = []
 new_point = move(entrance,current_grid,columns,finish,previous)
+
 
 
