@@ -2,7 +2,7 @@ import random
 import time
 import os
 
-def create_grid(entrance,finish,wall):
+def create_grid(entrance,finish,previous):
     grid = [
     [2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -82,7 +82,7 @@ def random_grid(entrance,previous):
 
     return grid
 
-def move(entrance,current_grid,rows,columns,finish,previous):
+def move(entrance,current_grid,columns,finish,previous):
     while entrance[1] < columns - 1:
         #this checks if theres is a free path both up and down picks a random path to follow
         if current_grid [entrance[0] + 1][entrance[1]] == 0 and current_grid[entrance[0] - 1][entrance[1]] == 0:
@@ -119,16 +119,16 @@ def move(entrance,current_grid,rows,columns,finish,previous):
                 
             #moves right if there is space
                 if current_grid[entrance[0]][entrance[1] + 1] != 2 and current_grid[entrance[0]][entrance[1] + 1] != 1 and current_grid[entrance[0]][entrance[1] + 1] != 3: 
-                   move_right(current_grid,entrance,finish)
+                   entrance = move_right(current_grid,entrance,finish,previous)
                 #moves down if there is space
                 elif current_grid [entrance[0] + 1][entrance[1]] != 2 and current_grid [entrance[0] + 1][entrance[1]] != 1 and current_grid[entrance[0]+1][entrance[1]] != 3:
-                    move_down(current_grid,entrance,finish)
+                    entrance = move_down(current_grid,entrance,finish,previous)
                 #moves up if there is space
                 elif current_grid [entrance[0] - 1][entrance[1]] != 2 and current_grid [entrance[0] - 1][entrance[1]] != 1:
-                    move_up(current_grid,entrance,finish)
+                    entrance = move_up(current_grid,entrance,finish,previous)
                 #moves left if there is space
                 elif current_grid[entrance[0]][entrance[1] - 1] != 2 and current_grid[entrance[0]][entrance[1] - 1] != 1: 
-                    move_left(current_grid,entrance,finish)
+                    entrance = move_left(current_grid,entrance,finish,previous)
                 
                 
                 if entrance [1] == columns - 1:
@@ -136,47 +136,53 @@ def move(entrance,current_grid,rows,columns,finish,previous):
                     if entrance[0] < rows:
                         entrance [0] += 1
                     current_grid = update_grid(current_grid,entrance)
-                if  current_grid [finish[0]][finish[1]] == 1:
+        if  current_grid [finish[0]][finish[1]] == 1:
                     print("Exit reached!!!")
                     return
-def move_right(current_grid,entrance,finish):
-    
+def move_right(current_grid,entrance,finish,previous):
+                    
+                    previous_step = [entrance[0],entrance[1]]
+                    previous.append(previous_step)
                     entrance[1] = entrance[1] + 1
                     current_grid = update_grid(current_grid,entrance)
-                    #if current_grid [entrance[0] + 1][entrance[1]] != 2 and current_grid[entrance[0] - 1][entrance[1]] != 2:
-                        #pick_a_path(current_grid,entrance)
                     if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
-                    if current_grid[entrance[0]][entrance[1] + 1] == 2 and current_grid[entrance[0]+1][entrance[1]] == 2 and current_grid[entrance[0]-1][entrance[1]] == 2:
-                          back_left(current_grid,entrance,finish) 
-def move_left(current_grid,entrance,finish):
-    
+                    return backstep(current_grid,entrance,previous)
+                          
+def move_left(current_grid,entrance,finish,previous):
+                    previous_step = [entrance[0],entrance[1]]
+                    previous.append(previous_step)
                     entrance[1] = entrance[1] - 1
-                    current_grid = update_grid(current_grid,entrance)
+                    current_grid = update_grid(current_grid,entrance)                    
                     if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
-                    back_right(current_grid,entrance,finish)             
-def move_up(current_grid,entrance,finish):
-    
+                    return backstep(current_grid,entrance,previous)             
+def move_up(current_grid,entrance,finish,previous):
+                    previous_step = [entrance[0],entrance[1]]
+                    previous.append(previous_step)
                     entrance[0] = entrance[0] - 1
                     current_grid = update_grid(current_grid,entrance)
                     if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
-                    back_down(current_grid,entrance,finish)
-def move_down(current_grid,entrance,finish):
+                    return backstep(current_grid,entrance,previous)                  
+def move_down(current_grid,entrance,finish,previous):
     
+                    previous_step = [entrance[0],entrance[1]]
+                    previous.append(previous_step)
                     entrance[0] = entrance[0] + 1
                     current_grid = update_grid(current_grid,entrance)
+                    backstep(current_grid,entrance,previous)
                     if  current_grid [finish[0]][finish[1]] == 1:
                         print("Exit reached!!!")
                         return
-                    if current_grid[entrance[0]][entrance[1] + 1] != 0 and current_grid[entrance[0]+1][entrance[1]] != 0 and current_grid[entrance[0]][entrance[1]-1] != 0:
-                        back_up(current_grid,entrance,finish)
+                    return backstep(current_grid,entrance,previous)
 def pick_a_path_updown(current_grid,entrance):
     path = random.choice((1,2))
+    previous_step = [entrance[0],entrance[1]]
+    previous.append(previous_step)
     match path:
         case 1:
            entrance[0] = entrance[0] + 1
@@ -187,6 +193,8 @@ def pick_a_path_updown(current_grid,entrance):
     return            
 def pick_a_path_rightdown(current_grid,entrance):
     path = random.choice((1,2))
+    previous_step = [entrance[0],entrance[1]]
+    previous.append(previous_step)
     match path:
         case 1:
            entrance[0] = entrance[0] + 1
@@ -197,6 +205,8 @@ def pick_a_path_rightdown(current_grid,entrance):
     return 
 def pick_a_path_leftright(current_grid,entrance):
     path = random.choice((1 ,2))
+    previous_step = [entrance[0],entrance[1]]
+    previous.append(previous_step)
     match path:
         case 1:
            entrance[1] = entrance[1] - 1
@@ -207,6 +217,8 @@ def pick_a_path_leftright(current_grid,entrance):
     return 
 def pick_a_path_rightup(current_grid,entrance):
     path = random.choice((1,2))
+    previous_step = [entrance[0],entrance[1]]
+    previous.append(previous_step)
     match path:
         case 1:
            entrance[0] = entrance[0] - 1
@@ -217,6 +229,8 @@ def pick_a_path_rightup(current_grid,entrance):
     return
 def pick_a_path_leftdown(current_grid,entrance):
     path = random.choice((1,2))
+    previous_step = [entrance[0],entrance[1]]
+    previous.append(previous_step)
     match path:
         case 1:
            entrance[0] = entrance[0] + 1
@@ -227,6 +241,8 @@ def pick_a_path_leftdown(current_grid,entrance):
     return
 def pick_a_path_leftup(current_grid,entrance):
     path = random.choice((1,2))
+    previous_step = [entrance[0],entrance[1]]
+    previous.append(previous_step)
     match path:
         case 1:
            entrance[0] = entrance[0] - 1
@@ -360,10 +376,10 @@ def backtrack(grid,entrance,previous):
         return entrance
 def backstep(grid,entrance,previous):
      neighbours = [grid[entrance[0]][entrance[1] - 1],grid[entrance[0]][entrance[1] + 1],grid[entrance[0]-1][entrance[1]],grid[entrance[0]+1][entrance[1]]]
-     if all(value != 0 for value in neighbours):
+     if all(value != 0 for value in neighbours) and not any(value == 5 for value in neighbours):
        entrance = previous[-1]
        previous.pop(-1)
-          
+       update_grid(grid,entrance) 
        return backstep(grid,entrance,previous)
      else:
           return entrance
@@ -398,14 +414,14 @@ def create_spaces(grid,entrance,previous):
     
 
 previous = []
-entrance = [2,2]
-finish = [19,11]
+entrance = [1,1]
+finish = [15,11]
 rows = 3
 columns = 20
 
-current_grid = random_grid(entrance,previous)
-entrance = [2,2]
+current_grid = create_grid(entrance,finish,previous)
+entrance = [1,1]
 previous = []
-new_point = move(entrance,current_grid,rows,columns,finish,previous)
+new_point = move(entrance,current_grid,columns,finish,previous)
 
 
