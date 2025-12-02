@@ -2,6 +2,7 @@ import random
 import time
 import os
 import sys
+import heapq
 sys.setrecursionlimit(1500)
 
 def create_grid(entrance,finish,previous):
@@ -384,18 +385,91 @@ def a_star(entrance,current_step,finish,current_grid,previous):
       rows = len(current_grid)
       cols = len(current_grid[0])
       all_cells = [(r, c) for r in range(rows) for c in range(cols)]
+       
+      open = []
+      closed = []
+      heapq.heapify(open)
+      cameFrom = {}
+      #distance from current node to start
+      gScore = {cell: ('inf') for cell in all_cells}
+      gScore[entrance] = 0
+    
+      fScore = {cell: ('inf') for cell in all_cells}
+      fScore[entrance] = gScore[entrance] + h(entrance,finish)
+      heapq.heappush(open,(fScore[entrance],h(entrance,finish),gScore[entrance],entrance))
 
-      g_score ={cell: float ('inf') for cell in all_cells}
-      f_score = {cell: float('inf') for cell in all_cells}
-      return g_score    
+      while open:
+            currG,currH,currF,currCell = heapq.heappop(open)
+            nearby_cell = [current_grid [currCell[0] + 1][currCell[1]],current_grid [currCell[0] - 1][currCell[1]],current_grid [currCell[0]][currCell[1]+1],current_grid [currCell[0]][currCell[1]-1]]
+            if currCell == finish:
+                  print("ok")
+                  break
+            
+            
+            closed.append(currCell)
 
+            for cell in nearby_cell:
+                  if cell not in [1,2,3]:
+                        if nearby_cell[0] == 0 :
+                              neighbour = (currCell[0]+1,currCell[1])
+                              newGscore = currG + distance(currCell,neighbour)
+                              gScore[neighbour] = newGscore
+                              newHscore = h(neighbour,finish)
+                              newFscore = newGscore + newHscore
+                              fScore[neighbour]=newFscore
+                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
+                              if neighbourset not in open:
+                                heapq.heappush(open,(neighbourset))
+                              print("ok")
+                        if nearby_cell[1] == 0 :
+                              neighbour = (currCell[0]-1,currCell[1])
+                              newGscore = currG + distance(currCell,neighbour)
+                              newHscore = h(neighbour,finish)
+                              newFscore = newGscore + newHscore
+                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
+                              if neighbourset not in open:
+                                heapq.heappush(open,(neighbourset))
+                              print("ok")
+                        if nearby_cell[2] == 0 :
+                              neighbour = (currCell[0],currCell[1]+1)
+                              newGscore = currG + distance(currCell,neighbour)
+                              newHscore = h(neighbour,finish)
+                              newFscore = newGscore + newHscore
+                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
+                              if neighbourset not in open:
+                                heapq.heappush(open,(neighbourset))
+                              print("ok")
+                        if nearby_cell[3] == 0 :
+                              neighbour = (currCell[0]+1,currCell[1]-1)
+                              newGscore = currG + distance(currCell,neighbour)
+                              newHscore = h(neighbour,finish)
+                              newFscore = newGscore + newHscore
+                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
+                              if neighbourset not in open:
+                                heapq.heappush(open,(neighbourset))
+                              print("ok")
+                        
+
+      
+
+
+      return     
+def h(cell1,cell2):
+    x1,y1=cell1
+    x2,y2=cell2
+    return abs(x1-x2) + abs(y1-y2)
+
+def distance(cell1,cell2):
+      dx = abs(cell1[1] - cell2[1])
+      dy = abs(cell1[0] - cell2[0])
+      return dx + dy
 previous = []
 entrance = [2,2]
-finish = [10,46]
+finish = [12,46]
 columns = 60
 
 current_grid = random_grid(entrance,previous,finish)
-entrance = [2,2]
+entrance = (2,2)
 current_step = entrance
 previous = []
 #move(entrance,current_grid,columns,finish,previous)
