@@ -7,23 +7,22 @@ sys.setrecursionlimit(1500)
 
 def create_grid(entrance,finish,previous):
     grid = [
-    [2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [2,0,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0],
-    [2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0],
-    [2,2,2,2,2,2,2,2,2,2,0,2,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,0,2,2,2,2,2,2,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,2,2,2,2,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,2,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,2,2,2,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,2,2,2,2,0,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     ]
     global map 
     map = {
@@ -87,7 +86,7 @@ def random_grid(entrance,previous,exit):
 
     return grid
 
-def move(entrance,current_grid,columns,finish,previous):
+def dfs(entrance,current_grid,columns,finish,previous):
     
     while entrance[1] < columns - 1:
         nearby_cell = [current_grid [entrance[0] + 1][entrance[1]],current_grid [entrance[0] - 1][entrance[1]],current_grid [entrance[0]][entrance[1]+1],current_grid [entrance[0]][entrance[1]-1]]
@@ -376,105 +375,74 @@ def create_spaces(grid,entrance,previous):
                     case 4:
                         entrance = down_space(grid,entrance,previous)     
                 
-            for rows in grid:
-                print("".join([map.get(cell) for cell in rows]))
+            #for rows in grid:
+                #print("".join([map.get(cell) for cell in rows]))
             create_spaces(grid,entrance,previous)
     return grid
 
-def a_star(entrance,current_step,finish,current_grid,previous):
-      rows = len(current_grid)
-      cols = len(current_grid[0])
-      all_cells = [(r, c) for r in range(rows) for c in range(cols)]
-       
-      open = []
-      closed = []
-      heapq.heapify(open)
-      cameFrom = {}
-      #distance from current node to start
-      gScore = {cell: ('inf') for cell in all_cells}
-      gScore[entrance] = 0
-    
-      fScore = {cell: ('inf') for cell in all_cells}
-      fScore[entrance] = gScore[entrance] + h(entrance,finish)
-      heapq.heappush(open,(fScore[entrance],h(entrance,finish),gScore[entrance],entrance))
-
-      while open:
-            currG,currH,currF,currCell = heapq.heappop(open)
-            nearby_cell = [current_grid [currCell[0] + 1][currCell[1]],current_grid [currCell[0] - 1][currCell[1]],current_grid [currCell[0]][currCell[1]+1],current_grid [currCell[0]][currCell[1]-1]]
-            if currCell == finish:
-                  print("ok")
-                  break
-            
-            
-            closed.append(currCell)
-
-            for cell in nearby_cell:
-                  if cell not in [1,2,3]:
-                        if nearby_cell[0] == 0 :
-                              neighbour = (currCell[0]+1,currCell[1])
-                              newGscore = currG + distance(currCell,neighbour)
-                              gScore[neighbour] = newGscore
-                              newHscore = h(neighbour,finish)
-                              newFscore = newGscore + newHscore
-                              fScore[neighbour]=newFscore
-                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
-                              if neighbourset not in open:
-                                heapq.heappush(open,(neighbourset))
-                              print("ok")
-                        if nearby_cell[1] == 0 :
-                              neighbour = (currCell[0]-1,currCell[1])
-                              newGscore = currG + distance(currCell,neighbour)
-                              newHscore = h(neighbour,finish)
-                              newFscore = newGscore + newHscore
-                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
-                              if neighbourset not in open:
-                                heapq.heappush(open,(neighbourset))
-                              print("ok")
-                        if nearby_cell[2] == 0 :
-                              neighbour = (currCell[0],currCell[1]+1)
-                              newGscore = currG + distance(currCell,neighbour)
-                              newHscore = h(neighbour,finish)
-                              newFscore = newGscore + newHscore
-                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
-                              if neighbourset not in open:
-                                heapq.heappush(open,(neighbourset))
-                              print("ok")
-                        if nearby_cell[3] == 0 :
-                              neighbour = (currCell[0]+1,currCell[1]-1)
-                              newGscore = currG + distance(currCell,neighbour)
-                              newHscore = h(neighbour,finish)
-                              newFscore = newGscore + newHscore
-                              neighbourset =(newFscore,newHscore,newGscore,neighbour)
-                              if neighbourset not in open:
-                                heapq.heappush(open,(neighbourset))
-                              print("ok")
-                        
-
+class aStar:
+      def __init__(self,entrance,grid,finish):
+            self.grid = grid
+            self.rows = len(grid)
+            self.columns = len(grid[0])
       
+      class node:
+        def __init__(self,cell,finish,g):
+                self.g = g
+                self.h = self.heuristic(cell,finish)
+                self.f = self.g + self.h
+                self.cord = cell
+                self.nearby = [[cell[0]+1,cell[1]],[cell[0]-1,cell[1]],[cell[0],cell[1]+1],[cell[0],cell[1]-1]]
+                
+        def heuristic(self,a,b):
+            y1,x1 = a
+            y2,x2 = b
+            return abs(x1-x2) + abs(y1-y2)
+      def pathfinder(self,entrance,finish):
+            all_cells = [(r, c) for r in range(self.rows) for c in range(self.columns)]
+            startNode = self.node(entrance,finish,0)
+            open = []
+            closed = []
+            open.append(startNode)
+            while True:
+                  if self.grid[finish[0]][finish[1]] == 1:
+                     return
+                  currCell = open[0]
+                  for cell in open:
+                        if cell.f < currCell.f or cell.f == currCell.f and cell.h < currCell.h:
+                              currCell = cell
+                  update_grid(self.grid,currCell.cord)             
+                  closed.append(currCell)
+                  open.remove(currCell)
+                  count = 0
+                  for cells in currCell.nearby:
+                        
+                        if self.grid[cells[0]][cells[1]] in [0,5]:
+                              print("free space")
+                              pNode = self.node(cells,finish,currCell.g+1)
+                              open.append(pNode)
+
+                              
+                        count += 1
+            return
+              
 
 
-      return     
-def h(cell1,cell2):
-    x1,y1=cell1
-    x2,y2=cell2
-    return abs(x1-x2) + abs(y1-y2)
 
-def distance(cell1,cell2):
-      dx = abs(cell1[1] - cell2[1])
-      dy = abs(cell1[0] - cell2[0])
-      return dx + dy
+
 previous = []
 entrance = [2,2]
-finish = [12,46]
-columns = 60
+finish = [13,15]
 
-current_grid = random_grid(entrance,previous,finish)
+
+current_grid = create_grid(entrance,finish,previous)
 entrance = (2,2)
 current_step = entrance
 previous = []
+columns = len(current_grid[0])
 #move(entrance,current_grid,columns,finish,previous)
-a = a_star(entrance,current_step,finish,current_grid,previous)
-
+a = dfs(entrance,current_grid,columns,finish,previous)
+#a.pathfinder(entrance,finish)
 print(a)
 
 
