@@ -9,14 +9,14 @@ def create_grid(entrance,previous,finish):
     grid = [
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,7,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,2,2,2,2,2,2,0,0,0,0,0,6,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,0,0,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,2,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,0,0,0,0,7,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,0,0,0,2,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,0,0,0,2,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,0,2,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,2,2,2,2,2,2,2,0,0,2,2,2,2],
@@ -390,11 +390,11 @@ class aStar:
       
       class node:
         def __init__(self,cell,finish,g,grid):
-                self.g = self.gScore(entrance,cell)
+                self.type = self.cell_type(grid[cell[0]][cell[1]])
+                self.g = g+self.move_cost(self.type)
                 self.h = self.heuristic(cell,finish)
                 self.f = self.g + self.h
                 self.cord = cell
-                self.type = self.cell_type(grid[cell[0]][cell[1]])
                 self.nearby = [[cell[0]+1,cell[1]],[cell[0]-1,cell[1]],[cell[0],cell[1]+1],[cell[0],cell[1]-1]]
                 
         def heuristic(self,a,b):
@@ -421,6 +421,16 @@ class aStar:
               elif cell == 7:
                     type = "water"
               return type
+        def move_cost(self,type):
+              if type == "empty" or type == "exit":
+                    cost = 1
+              elif type == "bush":
+                    cost = 3
+              elif type == "water":
+                    cost = 6
+              elif type == "taken":
+                    cost = 0
+              return cost
       
       def pathfinder(self,entrance,finish):
             all_cells = [(r, c) for r in range(self.rows) for c in range(self.columns)]
@@ -439,15 +449,16 @@ class aStar:
                      return
                   
                   for cell in open:
-                        if cell.f < currCell.f or cell.f == currCell.f and cell.h < currCell.h:
-                              if cell.type != "wall":
-                                currCell = cell            
-                        elif cell.f == currCell.f and cell.h == currCell.h:
-                              currCell = random.choice((cell,currCell))
-                        
-                        else:
-                              best = min(open, key=lambda n: (n.f, n.h))
-                              currCell = best
+                        if cell not in closed:
+                            if cell.f < currCell.f or cell.f == currCell.f and cell.h < currCell.h:
+                                if cell.type != "wall":
+                                    currCell = cell            
+                            elif cell.f == currCell.f and cell.h == currCell.h:
+                                currCell = random.choice((cell,currCell))
+                            
+                            else:
+                                best = min(open, key=lambda n: (n.f, n.h))
+                                currCell = best
                                 
                   update_grid(self.grid,currCell.cord)
                   steps += 1             
@@ -459,9 +470,9 @@ class aStar:
                   count = 0
                   for cells in currCell.nearby:
                         
-                        if self.grid[cells[0]][cells[1]] in [0,5]:
+                        if self.grid[cells[0]][cells[1]] in [0,5,6,7]:
                               print("free space")
-                              pNode = self.node(cells,finish,currCell.g+1,self.grid)
+                              pNode = self.node(cells,finish,currCell.g,self.grid)
                               open.append(pNode)
                               
                         
