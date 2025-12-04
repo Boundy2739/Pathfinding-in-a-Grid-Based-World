@@ -5,14 +5,14 @@ import sys
 import heapq
 sys.setrecursionlimit(1500)
 
-def create_grid(entrance,finish,previous):
+def create_grid(entrance,previous,finish):
     grid = [
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,7,0,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,2,2,2,2],
+    [2,2,2,2,2,2,2,2,0,0,0,0,0,6,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,2,2,2],
     [2,2,0,0,0,0,0,2,2,2,2,0,0,0,0,0,2,2,2,2],
@@ -31,6 +31,8 @@ def create_grid(entrance,finish,previous):
         3 : "\033[41m \033[0m",
         2 : '█',
         5 : "\033[43m \033[0m",
+        6 : "\033[102m \033[0m",
+        7 : "\033[106m \033[0m",
     }
     #temporary starting line
     grid[entrance[0]][entrance[1]] = 1
@@ -387,43 +389,88 @@ class aStar:
             self.columns = len(grid[0])
       
       class node:
-        def __init__(self,cell,finish,g):
-                self.g = g
+        def __init__(self,cell,finish,g,grid):
+                self.g = self.gScore(entrance,cell)
                 self.h = self.heuristic(cell,finish)
                 self.f = self.g + self.h
                 self.cord = cell
+                self.type = self.cell_type(grid[cell[0]][cell[1]])
                 self.nearby = [[cell[0]+1,cell[1]],[cell[0]-1,cell[1]],[cell[0],cell[1]+1],[cell[0],cell[1]-1]]
                 
         def heuristic(self,a,b):
             y1,x1 = a
             y2,x2 = b
             return abs(x1-x2) + abs(y1-y2)
+        def gScore(self,a,b):
+              y = abs(a[0]-b[0])
+              x = abs(a[1]-b[1])
+              return x + y
+        def cell_type(self,cell):
+              if cell == 0:
+                    type = "empty"
+              elif cell == 1:
+                    type = "taken"
+              elif cell == 2:
+                    type = "wall"
+              elif cell == 3:
+                    type = "taken"
+              elif cell == 5:
+                    type = "exit"
+              elif cell == 6:
+                    type = "bush"
+              elif cell == 7:
+                    type = "water"
+              return type
+      
       def pathfinder(self,entrance,finish):
             all_cells = [(r, c) for r in range(self.rows) for c in range(self.columns)]
-            startNode = self.node(entrance,finish,0)
+            startNode = self.node(entrance,finish,0,self.grid)
+            currCell = self.node(entrance,finish,0,self.grid)
             open = []
+            possibles = []
             closed = []
             open.append(startNode)
+            steps = 0
+            
             while True:
+                  
                   if self.grid[finish[0]][finish[1]] == 1:
+                     print(steps," taken")
                      return
-                  currCell = open[0]
+                  
                   for cell in open:
                         if cell.f < currCell.f or cell.f == currCell.f and cell.h < currCell.h:
-                              currCell = cell
-                  update_grid(self.grid,currCell.cord)             
+                              if cell.type != "wall":
+                                currCell = cell            
+                        elif cell.f == currCell.f and cell.h == currCell.h:
+                              currCell = random.choice((cell,currCell))
+                        
+                        else:
+                              best = min(open, key=lambda n: (n.f, n.h))
+                              currCell = best
+                                
+                  update_grid(self.grid,currCell.cord)
+                  steps += 1             
                   closed.append(currCell)
-                  open.remove(currCell)
+                  if currCell in open:
+                    open.remove(currCell)
+                  if startNode in open:
+                    open.remove(startNode)
                   count = 0
                   for cells in currCell.nearby:
                         
                         if self.grid[cells[0]][cells[1]] in [0,5]:
                               print("free space")
-                              pNode = self.node(cells,finish,currCell.g+1)
+                              pNode = self.node(cells,finish,currCell.g+1,self.grid)
                               open.append(pNode)
-
+                              
+                        
+                           
+                        
+                              
                               
                         count += 1
+                  
             return
               
 
@@ -435,14 +482,14 @@ entrance = [2,2]
 finish = [13,15]
 
 
-current_grid = create_grid(entrance,finish,previous)
+current_grid = create_grid(entrance,previous,finish)
 entrance = (2,2)
 current_step = entrance
 previous = []
 columns = len(current_grid[0])
 #move(entrance,current_grid,columns,finish,previous)
-a = dfs(entrance,current_grid,columns,finish,previous)
-#a.pathfinder(entrance,finish)
+a = aStar(entrance,current_grid,finish)
+a.pathfinder(entrance,finish)
 print(a)
 
 
