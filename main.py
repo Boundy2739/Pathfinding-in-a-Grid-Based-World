@@ -3,24 +3,29 @@ import time
 import os
 import sys
 import heapq
+import keyboard
+
 sys.setrecursionlimit(1500)
 
 def create_grid(entrance,previous,finish):
     grid = [
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2],
-    [2,2,2,2,2,2,2,2,0,0,0,0,7,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,0,0,0,2,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,0,0,0,2,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,0,2,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,2,2,0,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,2,2,2,0,0,2,2,2,2],
-    [2,2,0,0,0,0,0,2,2,2,2,2,2,2,2,0,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,6,6,6,6,6,6,6,6,6,6,6,7,7,7,6,6,2,2],
+    [2,2,2,2,0,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2],
+    [2,2,0,0,7,0,0,0,0,0,0,0,0,6,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     ]
@@ -87,175 +92,6 @@ def random_grid(entrance,previous,exit):
         print("".join([map.get(cell) for cell in rows]))
 
     return grid
-
-def dfs(entrance,current_grid,columns,finish,previous):
-    
-    while entrance[1] < columns - 1:
-        nearby_cell = [current_grid [entrance[0] + 1][entrance[1]],current_grid [entrance[0] - 1][entrance[1]],current_grid [entrance[0]][entrance[1]+1],current_grid [entrance[0]][entrance[1]-1]]
-        #this checks if theres is a free path both up and down picks a random path to follow
-        if current_grid [entrance[0] + 1][entrance[1]] == 0 and current_grid[entrance[0] - 1][entrance[1]] == 0:
-            pick_a_path_updown(current_grid,entrance)
-            if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-        elif current_grid [entrance[0] + 1][entrance[1]] == 0 and current_grid[entrance[0]][entrance[1]+1] == 0:
-            pick_a_path_rightdown(current_grid,entrance)
-            if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-        elif current_grid [entrance[0]][entrance[1]-1] == 0 and current_grid[entrance[0]][entrance[1]+1] == 0:
-            pick_a_path_leftright(current_grid,entrance)
-            if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-        elif current_grid [entrance[0]][entrance[1]-1] == 0 and current_grid[entrance[0]-1][entrance[1]] == 0:
-            pick_a_path_leftup(current_grid,entrance)
-            if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-        elif current_grid [entrance[0]][entrance[1]-1] == 0 and current_grid[entrance[0]+1][entrance[1]] == 0:
-            pick_a_path_leftdown(current_grid,entrance)
-            if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-        elif current_grid [entrance[0]][entrance[1]+1] == 0 and current_grid[entrance[0]-1][entrance[1]] == 0:
-            pick_a_path_rightup(current_grid,entrance)
-            if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-        else:
-                
-            #moves right if there is space
-                if nearby_cell[2] not in [2,1,3]: 
-                   entrance = move_right(current_grid,entrance,finish,previous)
-                #moves down if there is space
-                elif nearby_cell[0] not in [2,1,3]:
-                    entrance = move_down(current_grid,entrance,finish,previous)
-                #moves up if there is space
-                elif nearby_cell[1] not in [2,1,3]:
-                    entrance = move_up(current_grid,entrance,finish,previous)
-                #moves left if there is space
-                elif nearby_cell[3] not in [2,1,3]: 
-                    entrance = move_left(current_grid,entrance,finish,previous)
-                
-                
-                
-        if  current_grid [finish[0]][finish[1]] == 1:
-                    print("Exit reached!!!")
-                    return
-def move_right(current_grid,entrance,finish,previous):
-                    
-                    previous_step = [entrance[0],entrance[1]]
-                    previous.append(previous_step)
-                    entrance[1] = entrance[1] + 1
-                    current_grid = update_grid(current_grid,entrance)
-                    if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-                    return backstep(current_grid,entrance,previous)
-                          
-def move_left(current_grid,entrance,finish,previous):
-                    previous_step = [entrance[0],entrance[1]]
-                    previous.append(previous_step)
-                    entrance[1] = entrance[1] - 1
-                    current_grid = update_grid(current_grid,entrance)                    
-                    if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-                    return backstep(current_grid,entrance,previous)             
-def move_up(current_grid,entrance,finish,previous):
-                    previous_step = [entrance[0],entrance[1]]
-                    previous.append(previous_step)
-                    entrance[0] = entrance[0] - 1
-                    current_grid = update_grid(current_grid,entrance)
-                    if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-                    return backstep(current_grid,entrance,previous)                  
-def move_down(current_grid,entrance,finish,previous):
-    
-                    previous_step = [entrance[0],entrance[1]]
-                    previous.append(previous_step)
-                    entrance[0] = entrance[0] + 1
-                    current_grid = update_grid(current_grid,entrance)
-                    if  current_grid [finish[0]][finish[1]] == 1:
-                        print("Exit reached!!!")
-                        return
-                    return backstep(current_grid,entrance,previous)
-def pick_a_path_updown(current_grid,entrance):
-    path = random.choice((1,2))
-    previous_step = [entrance[0],entrance[1]]
-    previous.append(previous_step)
-    match path:
-        case 1:
-           entrance[0] = entrance[0] + 1
-           current_grid = update_grid(current_grid,entrance)
-        case 2:
-            entrance[0] = entrance[0] - 1
-            current_grid = update_grid(current_grid,entrance)
-    return            
-def pick_a_path_rightdown(current_grid,entrance):
-    path = random.choice((1,2))
-    previous_step = [entrance[0],entrance[1]]
-    previous.append(previous_step)
-    match path:
-        case 1:
-           entrance[0] = entrance[0] + 1
-           current_grid = update_grid(current_grid,entrance)
-        case 2:
-            entrance[1] = entrance[1] + 1
-            current_grid = update_grid(current_grid,entrance)
-    return 
-def pick_a_path_leftright(current_grid,entrance):
-    path = random.choice((1 ,2))
-    previous_step = [entrance[0],entrance[1]]
-    previous.append(previous_step)
-    match path:
-        case 1:
-           entrance[1] = entrance[1] - 1
-           current_grid = update_grid(current_grid,entrance)
-        case 2:
-            entrance[1] = entrance[1] + 1
-            current_grid = update_grid(current_grid,entrance)
-    return 
-def pick_a_path_rightup(current_grid,entrance):
-    path = random.choice((1,2))
-    previous_step = [entrance[0],entrance[1]]
-    previous.append(previous_step)
-    match path:
-        case 1:
-           entrance[0] = entrance[0] - 1
-           current_grid = update_grid(current_grid,entrance)
-        case 2:
-            entrance[1] = entrance[1] + 1
-            current_grid = update_grid(current_grid,entrance)
-    return
-def pick_a_path_leftdown(current_grid,entrance):
-    path = random.choice((1,2))
-    previous_step = [entrance[0],entrance[1]]
-    previous.append(previous_step)
-    match path:
-        case 1:
-           entrance[0] = entrance[0] + 1
-           current_grid = update_grid(current_grid,entrance)
-        case 2:
-            entrance[1] = entrance[1] - 1
-            current_grid = update_grid(current_grid,entrance)
-    return
-def pick_a_path_leftup(current_grid,entrance):
-    path = random.choice((1,2))
-    previous_step = [entrance[0],entrance[1]]
-    previous.append(previous_step)
-    match path:
-        case 1:
-           entrance[0] = entrance[0] - 1
-           current_grid = update_grid(current_grid,entrance)
-        case 2:
-            entrance[1] = entrance[1] - 1
-            current_grid = update_grid(current_grid,entrance)
-    return
-
-
 
 
     
@@ -344,15 +180,6 @@ def backtrack(grid,entrance,previous):
          
       else:
         return entrance
-def backstep(grid,entrance,previous):
-     neighbours = [grid[entrance[0]][entrance[1] - 1],grid[entrance[0]][entrance[1] + 1],grid[entrance[0]-1][entrance[1]],grid[entrance[0]+1][entrance[1]]]
-     if all(value != 0 for value in neighbours) and all(value != 5 for value in neighbours):
-       entrance = previous[-1]
-       previous.pop(-1)
-       update_grid(grid,entrance) 
-       return backstep(grid,entrance,previous)
-     else:
-          return entrance
                      
                 
     
@@ -389,13 +216,14 @@ class aStar:
             self.columns = len(grid[0])
       
       class node:
-        def __init__(self,cell,finish,g,grid):
+        def __init__(self,cell,finish,grid):
                 self.type = self.cell_type(grid[cell[0]][cell[1]])
-                self.g = g+self.move_cost(self.type)
+                self.g = float('inf')
                 self.h = self.heuristic(cell,finish)
-                self.f = self.g + self.h
+                self.f = float('inf')
                 self.cord = cell
                 self.nearby = [[cell[0]+1,cell[1]],[cell[0]-1,cell[1]],[cell[0],cell[1]+1],[cell[0],cell[1]-1]]
+                
                 
         def heuristic(self,a,b):
             y1,x1 = a
@@ -408,93 +236,147 @@ class aStar:
         def cell_type(self,cell):
               if cell == 0:
                     type = "empty"
+                    return float (1)
               elif cell == 1:
                     type = "taken"
+                    return float(0)
               elif cell == 2:
                     type = "wall"
+                    return 999
               elif cell == 3:
                     type = "taken"
+                    return float(0)
               elif cell == 5:
                     type = "exit"
+                    return float(1)
               elif cell == 6:
                     type = "bush"
+                    return float(3)
               elif cell == 7:
                     type = "water"
-              return type
-        def move_cost(self,type):
-              if type == "empty" or type == "exit":
-                    cost = 1
-              elif type == "bush":
-                    cost = 3
-              elif type == "water":
-                    cost = 6
-              elif type == "taken":
-                    cost = 0
-              return cost
-      
-      def pathfinder(self,entrance,finish):
-            all_cells = [(r, c) for r in range(self.rows) for c in range(self.columns)]
-            startNode = self.node(entrance,finish,0,self.grid)
-            currCell = self.node(entrance,finish,0,self.grid)
-            open = []
-            possibles = []
-            closed = []
-            open.append(startNode)
-            steps = 0
-            
-            while True:
-                  
-                  if self.grid[finish[0]][finish[1]] == 1:
-                     print(steps," taken")
-                     return
-                  
-                  for cell in open:
-                        if cell not in closed:
-                            if cell.f < currCell.f or cell.f == currCell.f and cell.h < currCell.h:
-                                if cell.type != "wall":
-                                    currCell = cell            
-                            elif cell.f == currCell.f and cell.h == currCell.h:
-                                currCell = random.choice((cell,currCell))
-                            
-                            else:
-                                best = min(open, key=lambda n: (n.f, n.h))
-                                currCell = best
-                                
-                  update_grid(self.grid,currCell.cord)
-                  steps += 1             
-                  closed.append(currCell)
-                  if currCell in open:
-                    open.remove(currCell)
-                  if startNode in open:
-                    open.remove(startNode)
-                  count = 0
-                  for cells in currCell.nearby:
-                        
-                        if self.grid[cells[0]][cells[1]] in [0,5,6,7]:
-                              print("free space")
-                              pNode = self.node(cells,finish,currCell.g,self.grid)
-                              open.append(pNode)
-                              
-                        
-                           
-                        
-                              
-                              
-                        count += 1
-                  
-            return
+                    return float(6)
               
+      
+      def pathfinder(self, entrance, finish):
 
+        open_list = []
+        open_set = set()
+        closed_set = set()
 
+        nodes = {}
 
+        def get_node(c):
+            if tuple(c) not in nodes:
+                nodes[tuple(c)] = self.node(c, finish, self.grid)
+            return nodes[tuple(c)]
+
+        start = get_node(entrance)
+        start.g = 0
+        start.f = start.h
+        counter = 0
+
+        heapq.heappush(open_list, (start.f, start.h, counter, start))
+        open_set.add(start)
+
+        while open_list:
+
+            f, h, _, current = heapq.heappop(open_list)
+            open_set.remove(current)
+            closed_set.add(current)
+
+            if current.cord == finish:
+                return True    # or reconstruct path
+
+            for n in current.nearby:
+                # skip walls
+                if self.grid[n[0]][n[1]] not in (0,5,6,7):
+                    continue
+
+                neighbor = get_node(n)
+
+                if neighbor in closed_set:
+                    continue
+
+                tentative_g = current.g + neighbor.type
+
+                if tentative_g < neighbor.g:
+                    neighbor.g = tentative_g
+                    neighbor.f = tentative_g + neighbor.h
+                
+                    counter += 1
+
+                    # if not in open_list, push it
+                    if neighbor not in open_set:
+                        heapq.heappush(open_list, (neighbor.f, neighbor.h, counter, neighbor))
+                        open_set.add(neighbor)
+            update_grid(self.grid,current.cord) 
+
+def editor(entrance,grid,finish):
+     y, x = [2,2]
+     cursor = [y,x]
+     while True:
+        if keyboard.is_pressed("left"):
+                x = x-1
+                print("left")
+                time.sleep(0.5)
+                
+        elif keyboard.is_pressed("right"):
+                x = x+1
+                print("right")
+                time.sleep(0.5)
+                
+        elif keyboard.is_pressed("up"):
+                y = y-1
+                print("up")
+                time.sleep(0.5)
+                
+        elif keyboard.is_pressed("down"):
+                y = y+1
+                print("down")
+                time.sleep(0.5)
+        cursor = [y,x]        
+        def on_enter_release(e):
+            edit_tile(grid, grid[y][x], cursor)
+
+        keyboard.on_release_key("enter", on_enter_release)
+        
+             
+             
+        
+        
+def edit_tile(grid,cell,cursor):
+     while True:
+        print("Insert 2 to create a wall\n")
+        print("Insert 6 to create a bush\n")
+        print("Insert 7 to create a water tile\n")
+        print("Insert 0 to clear the tile\n")
+        print("Insert 9 to cancel\n")
+        time.sleep(0.5)
+        input()
+        try:
+            value = int(input())
+        
+            if value in [0,2,6,7]:
+                cell = value
+                update_grid(grid,cursor)
+                input()
+                return value
+            elif value == 9:
+                return
+            else:
+                print("invalid input\n")
+        except ValueError:
+             print("insert a number\n")
+     
 
 previous = []
 entrance = [2,2]
-finish = [13,15]
+finish = [10,15]
 
 
 current_grid = create_grid(entrance,previous,finish)
 entrance = (2,2)
+editor(entrance,current_grid,finish)
 current_step = entrance
 previous = []
 columns = len(current_grid[0])
