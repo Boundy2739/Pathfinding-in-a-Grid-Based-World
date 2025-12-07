@@ -17,9 +17,9 @@ def create_grid(entrance,previous,finish):
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,6,6,6,6,6,6,6,6,6,6,6,7,7,7,6,6,2,2],
-    [2,2,2,2,0,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2],
-    [2,2,0,0,7,0,0,0,0,0,0,0,0,6,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
@@ -101,7 +101,7 @@ def update_grid(grid,entrance):
     os.system('cls' if os.name == 'nt' else 'clear')
     if grid[entrance[0]][entrance[1]] == 1:
           grid[entrance[0]][entrance[1]] = 3
-    else:
+    elif grid[entrance[0]][entrance[1]] == 0:
           grid[entrance[0]][entrance[1]] = 1
     for rows in grid:
         print("".join([map.get(cell) for cell in rows]))
@@ -311,62 +311,89 @@ class aStar:
                         open_set.add(neighbor)
             update_grid(self.grid,current.cord) 
 
-def editor(entrance,grid,finish):
-     y, x = [2,2]
-     cursor = [y,x]
-     while True:
-        if keyboard.is_pressed("left"):
-                x = x-1
-                print("left")
-                time.sleep(0.5)
-                
-        elif keyboard.is_pressed("right"):
-                x = x+1
-                print("right")
-                time.sleep(0.5)
-                
-        elif keyboard.is_pressed("up"):
-                y = y-1
-                print("up")
-                time.sleep(0.5)
-                
-        elif keyboard.is_pressed("down"):
-                y = y+1
-                print("down")
-                time.sleep(0.5)
-        cursor = [y,x]        
-        def on_enter_release(e):
-            edit_tile(grid, grid[y][x], cursor)
+last_enter_time = 0
 
-        keyboard.on_release_key("enter", on_enter_release)
+
+def editor(entrance, grid, finish):
+
+    y, x = 2, 2  
+    cursor = [y, x]
+
+    
+
+    
+    
+
+    tile_edit = False
+    while True:
+        moved = False
         
-             
-             
-        
-        
-def edit_tile(grid,cell,cursor):
-     while True:
-        print("Insert 2 to create a wall\n")
-        print("Insert 6 to create a bush\n")
-        print("Insert 7 to create a water tile\n")
-        print("Insert 0 to clear the tile\n")
-        print("Insert 9 to cancel\n")
-        time.sleep(0.5)
-        input()
+        if keyboard.is_pressed("left"):
+            x -= 1
+            moved = True
+
+        elif keyboard.is_pressed("right"):
+            x += 1
+            moved = True
+
+        elif keyboard.is_pressed("up"):
+            y -= 1
+            moved = True
+
+        elif keyboard.is_pressed("down"):
+            y += 1
+            moved = True
+        elif keyboard.is_pressed("enter") and tile_edit == False:
+
+            tile_edit = True
+            edit_tile(grid,cursor)
+            update_grid(grid,[y,x])
+        elif keyboard.is_pressed("x") and tile_edit == False:
+
+           return grid
+            
+        if tile_edit == True and not keyboard.is_pressed("enter"):
+             tile_edit = False
+        if moved:
+            cursor[0], cursor[1] = y, x
+            print(f"Cursor moved to {cursor}")
+            time.sleep(0.15)   
+
+
+def edit_tile(grid, cursor):
+    y, x = cursor
+    input()
+    while True:
+        print("\n--- TILE EDITOR ---")
+        print("\n--- Insert a value ---")
+        print("2 = Wall")
+        print("5 = maze exit tile")
+        print("6 = Bush tile")
+        print("7 = Water tile")
+        print("0 = Clear tile")
+        print("9 = Cancel")
+        print("-------------------")
+
+        value = input("> ")
+
         try:
-            value = int(input())
-        
-            if value in [0,2,6,7]:
-                cell = value
-                update_grid(grid,cursor)
-                input()
-                return value
-            elif value == 9:
-                return
-            else:
-                print("invalid input\n")
+            value = int(value)
         except ValueError:
-             print("insert a number\n")
+            print("Please enter a number.")
+            continue
+
+        if value in [0, 2,5,6,7]:
+            grid[y][x] = value
+            print(f"Tile at {cursor} set to {value}")
+            return value
+
+        elif value == 9:
+            print("Canceled.")
+            time.sleep(1)
+            return
+
+        else:
+            print("Invalid option.")
      
 
 previous = []
