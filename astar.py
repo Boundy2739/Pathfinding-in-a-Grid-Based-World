@@ -14,10 +14,6 @@ def update_grid(grid,entrance):
     }
     #time.sleep(0.1)
     #os.system('cls' if os.name == 'nt' else 'clear')
-    """if grid[entrance[0]][entrance[1]] == 1:
-          grid[entrance[0]][entrance[1]] = 3
-    elif grid[entrance[0]][entrance[1]] == 0:
-          grid[entrance[0]][entrance[1]] = 1"""
     for rows in grid:
         print("".join([map.get(cell) for cell in rows]))
     print("")
@@ -43,10 +39,10 @@ class aStar:
                 if cell_value == 0: self.type = 1       # empty
                 elif cell_value == 1: self.type = 0     # taken
                 elif cell_value == 2: self.type = 999   # wall
-                elif cell_value == 3: self.type = 0
-                elif cell_value == 5: self.type = 1
-                elif cell_value == 6: self.type = 3
-                elif cell_value == 7: self.type = 6
+                elif cell_value == 3: self.type = 0     
+                elif cell_value == 5: self.type = 1     #exit
+                elif cell_value == 6: self.type = 3     #bush
+                elif cell_value == 7: self.type = 6     #river 
                 self.cord = (y, x)
                 self.g = 10**9
                 self.h = abs(x - fx) + abs(y - fy)
@@ -98,7 +94,7 @@ class aStar:
                 return retrace(self.grid,current,finish)
 
             for n in current.nearby:
-                # skip walls
+                # ignores walls
                 if self.grid[n[0]][n[1]] not in (0,5,6,7):
                     continue
 

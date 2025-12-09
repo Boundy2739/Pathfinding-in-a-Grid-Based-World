@@ -1,24 +1,31 @@
+import keyboard
+import time
+import os
 def create_grid(entrance,previous,finish):
     grid = [
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     ]
     global map 
     map = {
@@ -39,7 +46,10 @@ def create_grid(entrance,previous,finish):
     for rows in grid:
         print("".join([map.get(cell) for cell in rows]))
         
-        
+    print("")
+    print("Use the arrow keys to move around\n")
+    print("Press enter to edit the current tile\n")
+    print("Press x to exit the grid editor\n")   
     return grid
 
 
@@ -47,65 +57,73 @@ def editor(entrance, grid, finish):
 
     y, x = 2, 2  
     cursor = [y, x]
-
-    
     prev = -1
-    
+    prev_entrance = entrance
+    prev_exit = finish
     
 
     tile_edit = False
     while True:
         moved = False
-        if keyboard.is_pressed("left"):
+        if keyboard.is_pressed("left") and tile_edit == False:
             if prev >= 0:
                  grid[y][x] = prev
-            x -= 1
+            if x > 2:
+                x -= 1
             moved = True
 
-        elif keyboard.is_pressed("right"):
+        elif keyboard.is_pressed("right") and tile_edit == False:
             if prev >= 0:
                  grid[y][x] = prev
-            x += 1
+            if x < len(grid[0]) - 3:
+                x += 1
             moved = True
 
-        elif keyboard.is_pressed("up"):
+        elif keyboard.is_pressed("up") and tile_edit == False:
             if prev >= 0:
                  grid[y][x] = prev
-            y -= 1
+            if y > 2:
+                y -= 1
             moved = True
 
-        elif keyboard.is_pressed("down"):
+        elif keyboard.is_pressed("down") and tile_edit == False:
             if prev >= 0:
                  grid[y][x] = prev
-            y += 1
+            if y < len(grid) - 3:
+                y += 1
             moved = True
         elif keyboard.is_pressed("enter") and tile_edit == False:
 
             tile_edit = True
-            edit_tile(grid,cursor)
-            update_grid(grid,[y,x])
+            new_cell = edit_tile(grid,cursor,prev_entrance,prev_exit)
             prev = grid[y][x]
+            if new_cell == 1:
+                prev_entrance = [y,x]
+            elif new_cell == 5:
+                prev_exit = [y,x]
+            update_grid(grid,[y,x])
         elif keyboard.is_pressed("x") and tile_edit == False:
-
-           return grid
+           print("exiting edit mode")
+           return prev_entrance,prev_exit,grid
             
         if tile_edit == True and not keyboard.is_pressed("enter"):
              tile_edit = False
         if moved:
             prev = grid[y][x]
             cursor[0], cursor[1] = y, x
-            print(f"Cursor moved to {cursor}")
             grid[y][x] = 10
             update_grid(grid,cursor)
+            print(f"Cursor moved to tile {cursor}")
             time.sleep(0.15)   
 
 
-def edit_tile(grid, cursor):
+def edit_tile(grid, cursor,prev_entrance,prev_exit):
     y, x = cursor
     
     
     print("\n--- TILE EDITOR ---")
     print("\n--- Insert a value ---")
+    print("1 = Entrance")
     print("2 = Wall")
     print("5 = maze exit tile")
     print("6 = Bush tile")
@@ -115,25 +133,37 @@ def edit_tile(grid, cursor):
     print("-------------------")
 
     while True:
+        if keyboard.is_pressed("0"):
+            print(f"Tile at {cursor} set to clear")
+            grid[y][x] = 0
+            time.sleep(0.1)
+            return
+        elif keyboard.is_pressed("1"):
+            print(f"Tile at {cursor} set to entrance")
+            grid[prev_entrance[0]][prev_entrance[1]] = 0
+            grid[y][x] = 1
+            time.sleep(0.1)
+            return 1
         if keyboard.is_pressed("2"):
-            print(f"Tile at {cursor} set to {2}")
+            print(f"Tile at {cursor} set to wall")
             grid[y][x] = 2
-            time.sleep(0.5)
+            time.sleep(0.1)
             return 
         elif keyboard.is_pressed("5"):
+            grid[prev_exit[0]][prev_exit[1]] = 0
             grid[y][x] = 5
-            print(f"Tile at {cursor} set to {5}")
-            time.sleep(0.5)
-            return 
+            print(f"Tile at {cursor} set to exit")
+            time.sleep(0.1)
+            return 5
         elif keyboard.is_pressed("6"):
             grid[y][x] = 6
-            print(f"Tile at {cursor} set to {6}")
-            time.sleep(0.5)
+            print(f"Tile at {cursor} set to bush")
+            time.sleep(0.1)
             return 
         elif keyboard.is_pressed("7"):
             grid[y][x] = 7
-            print(f"Tile at {cursor} set to {7}")
-            time.sleep(0.5)
+            print(f"Tile at {cursor} set to river")
+            time.sleep(0.1)
             return 
         elif keyboard.is_pressed("9"):
             
@@ -156,3 +186,14 @@ def cursor_position(grid, cursor):
         print(line)
 
     print("\n" * 3) 
+
+def update_grid(grid,entrance):
+    
+    os.system('cls' if os.name == 'nt' else 'clear')
+    for rows in grid:
+        print("".join([map.get(cell) for cell in rows]))
+    print("")
+    print("Use the arrow keys to move around\n")
+    print("Press enter to edit the current tile\n")
+    print("Press x to exit the grid editor\n")
+    return grid
