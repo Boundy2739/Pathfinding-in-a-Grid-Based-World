@@ -1,6 +1,18 @@
 import keyboard
 import time
 import os
+global markers 
+markers = {
+        0 :" ",
+        1 : "\033[44m \033[0m",
+        3 : "\033[41m \033[0m",
+        2 : '█',
+        5 : "\033[43m \033[0m",
+        6 : "\033[102m \033[0m",
+        7 : "\033[106m \033[0m",
+        10 : "\033[45m \033[0m",
+        11: "\033[103m \033[0m",
+    }
 def create_grid(entrance,previous,finish):
     grid = [
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
@@ -27,24 +39,14 @@ def create_grid(entrance,previous,finish):
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     ]
-    global map 
-    map = {
-        0 :" ",
-        1 : "\033[44m \033[0m",
-        3 : "\033[41m \033[0m",
-        2 : '█',
-        5 : "\033[43m \033[0m",
-        6 : "\033[102m \033[0m",
-        7 : "\033[106m \033[0m",
-        10 : "\033[45m \033[0m",
-    }
+    
     #temporary starting line
     grid[entrance[0]][entrance[1]] = 1
     #temporary finish
     grid[finish[0]][finish[1]] = 5
     #grid = create_wall(grid)
     for rows in grid:
-        print("".join([map.get(cell) for cell in rows]))
+        print("".join([markers.get(cell) for cell in rows]))
         
     print("")
     print("Use the arrow keys to move around\n")
@@ -58,7 +60,7 @@ def editor(entrance, grid, finish):
     y, x = 2, 2  
     cursor = [y, x]
     prev = -1
-    prev_entrance = entrance
+    prev_entrance = [2,2]
     prev_exit = finish
     
 
@@ -103,6 +105,9 @@ def editor(entrance, grid, finish):
                 prev_exit = [y,x]
             update_grid(grid,[y,x])
         elif keyboard.is_pressed("x") and tile_edit == False:
+           tile_edit = True
+           if grid[y][x] == 10:
+               grid[y][x] = 0
            print("exiting edit mode")
            return prev_entrance,prev_exit,grid
             
@@ -136,24 +141,24 @@ def edit_tile(grid, cursor,prev_entrance,prev_exit):
         if keyboard.is_pressed("0"):
             print(f"Tile at {cursor} set to clear")
             grid[y][x] = 0
-            time.sleep(0.1)
+            
             return
         elif keyboard.is_pressed("1"):
             print(f"Tile at {cursor} set to entrance")
             grid[prev_entrance[0]][prev_entrance[1]] = 0
-            grid[y][x] = 1
-            time.sleep(0.1)
+            grid[y][x] = 11
+            
             return 1
         if keyboard.is_pressed("2"):
             print(f"Tile at {cursor} set to wall")
             grid[y][x] = 2
-            time.sleep(0.1)
+            
             return 
         elif keyboard.is_pressed("5"):
             grid[prev_exit[0]][prev_exit[1]] = 0
             grid[y][x] = 5
             print(f"Tile at {cursor} set to exit")
-            time.sleep(0.1)
+            
             return 5
         elif keyboard.is_pressed("6"):
             grid[y][x] = 6
@@ -163,7 +168,7 @@ def edit_tile(grid, cursor,prev_entrance,prev_exit):
         elif keyboard.is_pressed("7"):
             grid[y][x] = 7
             print(f"Tile at {cursor} set to river")
-            time.sleep(0.1)
+            
             return 
         elif keyboard.is_pressed("9"):
             
@@ -191,7 +196,7 @@ def update_grid(grid,entrance):
     
     os.system('cls' if os.name == 'nt' else 'clear')
     for rows in grid:
-        print("".join([map.get(cell) for cell in rows]))
+        print("".join([markers.get(cell) for cell in rows]))
     print("")
     print("Use the arrow keys to move around\n")
     print("Press enter to edit the current tile\n")

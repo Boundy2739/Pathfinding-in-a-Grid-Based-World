@@ -1,4 +1,19 @@
 import random
+import time
+import os
+global markers 
+markers = {
+        0 :" ",
+        1 : "\033[44m \033[0m", #marker for cells visited
+        3 : "\033[41m \033[0m", #marker for the best path found
+        2 : '█', #marker for the walls
+        4 :"\033[106m \033[0m",
+        5 : "\033[43m \033[0m", #marker for the exit
+        6 : "\033[102m \033[0m", #marker for the bushes
+        7 : "\033[106m \033[0m", #marker for the rivers
+        10 : "\033[45m \033[0m", #marker for the purple cursor in edit mode
+        11: "\033[103m \033[0m", #marker for the start cell
+    }
 def random_grid(entrance,previous,exit):
     grid = [
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
@@ -26,19 +41,10 @@ def random_grid(entrance,previous,exit):
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     ]
-    global map 
-    map = {
-        0 :" ",
-        1 : "\033[44m \033[0m",
-        3 : "\033[41m \033[0m",
-        2 : '█',
-        4 : "\033[46m \033[0m",
-        5 : "\033[43m \033[0m",
-    }
     create_spaces(grid,entrance,previous)
     grid[exit[0]][exit[1]] = 5
     for rows in grid:
-        print("".join([map.get(cell) for cell in rows]))
+        print("".join([markers.get(cell) for cell in rows]))
 
     return grid
 
@@ -53,7 +59,7 @@ def update_grid(grid,entrance):
     elif grid[entrance[0]][entrance[1]] == 0:
           grid[entrance[0]][entrance[1]] = 1
     for rows in grid:
-        print("".join([map.get(cell) for cell in rows]))
+        print("".join([markers.get(cell) for cell in rows]))
     print("")
     print("")
     print("")
@@ -65,16 +71,19 @@ def update_grid(grid,entrance):
 
 def right_space(grid,entrance,previous):
      
-     
+     #Breaks walls to create a passage to the right in the maze.
      if grid[entrance[0]][entrance[1] + 2] == 4: 
             previous_sp = [entrance[0],entrance[1]]
+            #save current position for backtracking
             previous.append(previous_sp)
             entrance[1] = entrance[1] + 1
             grid[entrance[0]][entrance[1]] = 0
             entrance[1] = entrance[1] + 1
             grid[entrance[0]][entrance[1]] = 0
             return entrance
+     
      else:
+        # backtrack to previous position if the path is blocked
         return backtrack(grid,entrance,previous)       
       
      
@@ -121,26 +130,28 @@ def down_space(grid,entrance,previous):
        
                
 def backtrack(grid,entrance,previous):
+       # Check if all adjacent walls two cells away are already broken
       if grid[entrance[0]][entrance[1] - 2] !=4 and grid[entrance[0]+2][entrance[1]] !=4  and grid[entrance[0]-2][entrance[1]] !=4  and grid[entrance[0]][entrance[1]+2] !=4:
        entrance = previous[-1]
        previous.pop(-1)
+       # Continue backtracking recursively
        return backtrack(grid,entrance,previous)
        
          
-      else:
+      else:  # At least one breakable wall exists, return current entrance
         return entrance
                      
                       
 def create_spaces(grid,entrance,previous):
     cells = [cell for row in grid for cell in row]
     if any(cell == 4 for cell in cells):
-            #time.sleep(0.1)
+            #time.sleep(0.05)
             #os.system('cls' if os.name == 'nt' else 'clear')
             exit = [15,28]
             
             
-            space = random.choice((1,2,3,4))
-            match space:
+            direction = random.choice((1,2,3,4))
+            match direction:
                     case 1:
                         entrance = right_space(grid,entrance,previous)
                     case 2:
@@ -151,6 +162,6 @@ def create_spaces(grid,entrance,previous):
                         entrance = down_space(grid,entrance,previous)     
                 
             #for rows in grid:
-                #print("".join([map.get(cell) for cell in rows]))
+                #print("".join([markers.get(cell) for cell in rows]))
             create_spaces(grid,entrance,previous)
     return grid
