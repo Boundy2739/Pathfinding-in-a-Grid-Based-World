@@ -7,7 +7,7 @@ import astar
 import editor
 sys.setrecursionlimit(1500)
 
-
+#I have issues with the keyboard listensers, this is a temporary fix
 def safe_input_number(prompt="> "):
     while True:
         val = input(prompt).strip()
@@ -16,7 +16,6 @@ def safe_input_number(prompt="> "):
         return int(val)
 
 current_grid = 0
-visuals = False
 while True:
     print("Insert 1 to generate a random grid\n")
     print("Insert 2 to create an empty grid and edit it\n")
